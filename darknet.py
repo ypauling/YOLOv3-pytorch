@@ -26,21 +26,21 @@ class DetectionLayer(nn.Module):
         super(DetectionLayer, self).__init__()
         self.anchors = anchors
 
-class UpsampleLayer(nn.Module):
-    def __init__(self, scale_factor, mode, align_corners):
-        super(UpsampleLayer, self).__init__()
-        self.scale_factor = scale_factor
-        self.mode = mode
-        self.align_corners = align_corners
-
-    def forward(self, x):
-        x = F.interpolate(
-            x,
-            scale_factor=self.scale_factor,
-            mode=self.mode,
-            align_corners=self.align_corners
-        )
-        return x
+#class UpsampleLayer(nn.Module):
+#    def __init__(self, scale_factor, mode, align_corners):
+#        super(UpsampleLayer, self).__init__()
+#        self.scale_factor = scale_factor
+#        self.mode = mode
+#        self.align_corners = align_corners
+#
+#    def forward(self, x):
+#        x = F.interpolate(
+#            x,
+#            scale_factor=self.scale_factor,
+#            mode=self.mode,
+#            align_corners=self.align_corners
+#        )
+#        return x
 
 def parse_cfg(cfgfile):
     file = open(cfgfile, 'r')
@@ -111,7 +111,7 @@ def create_modules(blocks):
         ### Build upsample layer
         elif x['type'] == 'upsample':
             stride = x['stride']
-            upsample = UpsampleLayer(
+            upsample = nn.Upsample(
                 scale_factor=2, mode='bilinear', align_corners=True
             )
             module.add_module('upsample_{}'.format(index), upsample)
